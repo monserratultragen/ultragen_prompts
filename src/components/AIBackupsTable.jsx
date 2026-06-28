@@ -2,11 +2,17 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const PREDEFINED_TAGS = [
-    'leggins', 'bikini', 'latex', 'cuero', 'lencería',
-    'vestido', 'jeans', 'casual', 'deportivo', 'bodysuit',
-    'cyberpunk', 'futurista', 'gótico', 'neón', 'elegante',
-    'retrato', 'primer plano', 'cuerpo entero',
-    'interior', 'exterior', 'lluvia', 'noche', 'estudio'
+    'piel', 'top', 'tank top', 'pantalón', 'shorts', 'mochila', 'camiseta', 'lentes',
+    'camisa', 'vestido', 'aros', 'deportivo',
+    'postura', 'piernas', 'glúteos', 'primer plano', 'manos', 'brazos', 'sentada',
+    'cintura', 'caderas', 'frontal', 'espalda', 'caída',
+    'campo', 'gimnasio', 'baño', 'interior', 'exterior', 'casa', 'selva', 'pasillo',
+    'cama', 'camino', 'lluvia', 'piscina',
+    'oscuro', 'suave', 'elegante', 'cinematográfico', 'pastel', 'dramático', 'formal',
+    'casual', 'industrial', 'nocturno', 'soft',
+    'luz', 'natural', 'iluminación', 'sombras', 'foco', 'silueta', 'luz cálida',
+    'atardecer', 'luces', 'luz natural', 'iluminado', 'sombra',
+    'tirantes', 'bolso', 'guantes', 'cinturón', 'gafas', 'collar', 'pendientes', 'pulsera', 'auriculares'
 ]
 
 const AIBackupsTable = ({ chapters }) => {
@@ -22,7 +28,6 @@ const AIBackupsTable = ({ chapters }) => {
     const [selectedSinglePrompt, setSelectedSinglePrompt] = useState(null)
     const [movingPrompt, setMovingPrompt] = useState(null)
     const [toast, setToast] = useState(null)
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
     const [activeTags, setActiveTags] = useState([])
 
     const showToast = (message) => {
@@ -33,9 +38,6 @@ const AIBackupsTable = ({ chapters }) => {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768)
-        window.addEventListener('resize', handleResize)
-
         const fetchExistingPrompts = async () => {
             try {
                 const res = await axios.get(`${apiUrl}/api/capitulo-prompts/`)
@@ -68,8 +70,6 @@ const AIBackupsTable = ({ chapters }) => {
         } else {
             setInitialLoading(false)
         }
-
-        return () => window.removeEventListener('resize', handleResize)
     }, [chapters, apiUrl])
 
     const goToDiarios = () => {
@@ -125,7 +125,7 @@ const AIBackupsTable = ({ chapters }) => {
         }
     }
 
-    if (initialLoading) return <div style={{ color: '#888', textAlign: 'center', padding: '20px' }}>Analizando respaldos...</div>
+    if (initialLoading) return <div style={{ color: '#888', textAlign: 'center', padding: '12px', fontSize: '0.7rem' }}>Analizando respaldos...</div>
 
     const uniqueDiarios = [...new Set(filteredChapters.map(cap => cap.diario_nombre))].sort((a, b) => {
         const d_a = filteredChapters.find(c => c.diario_nombre === a)
@@ -146,7 +146,7 @@ const AIBackupsTable = ({ chapters }) => {
         : []
 
     const Breadcrumbs = () => (
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', fontSize: '0.85rem', color: '#888', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '4px', marginBottom: '10px', fontSize: '0.65rem', color: '#888', flexWrap: 'wrap' }}>
             <span onClick={goToDiarios} style={{ cursor: 'pointer', color: viewLevel === 'diarios' ? 'var(--accent-color)' : 'inherit' }}>Inicio</span>
             {selectedDiario && (
                 <>
@@ -173,21 +173,21 @@ const AIBackupsTable = ({ chapters }) => {
         <thead style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
             <tr>
                 {columns.map(col => (
-                    <th key={col} style={{ padding: '12px', textAlign: col === 'Acción' || col === 'Acciones' ? 'center' : 'left', borderBottom: '1px solid #333' }}>{col}</th>
+                    <th key={col} style={{ padding: '8px 6px', textAlign: col === 'Acción' || col === 'Acciones' ? 'center' : 'left', borderBottom: '1px solid #333', fontSize: '0.65rem' }}>{col}</th>
                 ))}
             </tr>
         </thead>
     )
 
     const EyeIcon = () => (
-        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
             <circle cx="12" cy="12" r="3"></circle>
         </svg>
     )
 
     const MoveIcon = () => (
-        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
             <line x1="12" y1="11" x2="12" y2="17"></line>
             <polyline points="9 14 12 17 15 14"></polyline>
@@ -195,7 +195,7 @@ const AIBackupsTable = ({ chapters }) => {
     )
 
     const CopyIcon = () => (
-        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
         </svg>
@@ -209,13 +209,13 @@ const AIBackupsTable = ({ chapters }) => {
             style={{
                 color: color,
                 cursor: 'pointer',
-                padding: '6px',
+                padding: '4px',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'all 0.2s ease',
                 borderRadius: '50%',
-                margin: '0 2px'
+                margin: '0 1px'
             }}
         >
             <Icon />
@@ -244,40 +244,40 @@ const AIBackupsTable = ({ chapters }) => {
                 alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)'
             }}>
                 <div style={{
-                    width: '90%', maxWidth: '500px', backgroundColor: '#1a1a1a',
-                    border: '1px solid #444', borderRadius: '12px', padding: '25px',
-                    maxHeight: '80vh', display: 'flex', flexDirection: 'column'
+                    width: '92%', maxWidth: '400px', backgroundColor: '#1a1a1a',
+                    border: '1px solid #444', borderRadius: '10px', padding: '16px',
+                    maxHeight: '90vh', display: 'flex', flexDirection: 'column'
                 }}>
-                    <h3 style={{ color: 'var(--accent-color)', marginTop: 0, marginBottom: '20px' }}>Seleccionar Destino</h3>
+                    <h3 style={{ color: 'var(--accent-color)', marginTop: 0, marginBottom: '10px', fontSize: '0.8rem' }}>Seleccionar Destino</h3>
 
-                    <div style={{ flex: 1, overflowY: 'auto', marginBottom: '20px', padding: '10px', backgroundColor: '#000', borderRadius: '8px' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px', padding: '6px', backgroundColor: '#000', borderRadius: '6px' }}>
                         {Object.entries(treeData).sort((a, b) => a[1].orden - b[1].orden).map(([dName, dData]) => (
-                            <div key={dName} style={{ marginBottom: '5px' }}>
-                                <div onClick={() => toggleDiario(dName)} style={{ cursor: 'pointer', color: '#fff', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}>
+                            <div key={dName} style={{ marginBottom: '3px' }}>
+                                <div onClick={() => toggleDiario(dName)} style={{ cursor: 'pointer', color: '#fff', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '6px', padding: '3px' }}>
                                     <span>{expandedDiarios[dName] ? '▼' : '▶'}</span>
                                     <span>📁 {dName}</span>
                                 </div>
                                 {expandedDiarios[dName] && (
-                                    <div style={{ marginLeft: '20px', borderLeft: '1px solid #333' }}>
+                                    <div style={{ marginLeft: '16px', borderLeft: '1px solid #333' }}>
                                         {Object.entries(dData.tomos).sort((a, b) => a[1].orden - b[1].orden).map(([tName, tData]) => (
                                             <div key={tName}>
-                                                <div onClick={() => toggleTomo(tName)} style={{ cursor: 'pointer', color: '#ccc', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}>
+                                                <div onClick={() => toggleTomo(tName)} style={{ cursor: 'pointer', color: '#ccc', fontSize: '0.65rem', display: 'flex', alignItems: 'center', gap: '6px', padding: '3px' }}>
                                                     <span>{expandedTomos[tName] ? '▼' : '▶'}</span>
                                                     <span>📂 {tName}</span>
                                                 </div>
                                                 {expandedTomos[tName] && (
-                                                    <div style={{ marginLeft: '20px' }}>
+                                                    <div style={{ marginLeft: '16px' }}>
                                                         {tData.chapters.map(cap => (
                                                             <div
                                                                 key={cap.id}
                                                                 onClick={() => setSelectedDest(cap)}
                                                                 style={{
                                                                     cursor: 'pointer',
-                                                                    padding: '4px 8px',
-                                                                    fontSize: '0.8rem',
+                                                                    padding: '3px 6px',
+                                                                    fontSize: '0.65rem',
                                                                     color: selectedDest?.id === cap.id ? 'var(--accent-color)' : '#999',
                                                                     backgroundColor: selectedDest?.id === cap.id ? 'rgba(255,76,76,0.1)' : 'transparent',
-                                                                    borderRadius: '4px'
+                                                                    borderRadius: '3px'
                                                                 }}
                                                             >
                                                                 📄 {cap.nombre}
@@ -293,15 +293,16 @@ const AIBackupsTable = ({ chapters }) => {
                         ))}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                        <button onClick={onCancel} style={{ padding: '8px 16px', background: 'none', border: '1px solid #444', color: '#888', borderRadius: '4px', cursor: 'pointer' }}>Cancelar</button>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                        <button onClick={onCancel} style={{ padding: '6px 12px', background: 'none', border: '1px solid #444', color: '#888', borderRadius: '4px', cursor: 'pointer', fontSize: '0.65rem' }}>Cancelar</button>
                         <button
                             onClick={() => onSelect(selectedDest)}
                             disabled={!selectedDest}
                             style={{
-                                padding: '8px 16px',
+                                padding: '6px 12px',
                                 background: selectedDest ? 'var(--accent-color)' : '#333',
-                                border: 'none', color: '#fff', borderRadius: '4px', cursor: selectedDest ? 'pointer' : 'not-allowed'
+                                border: 'none', color: '#fff', borderRadius: '4px', cursor: selectedDest ? 'pointer' : 'not-allowed',
+                                fontSize: '0.65rem'
                             }}
                         >
                             Mover Aquí
@@ -313,16 +314,16 @@ const AIBackupsTable = ({ chapters }) => {
     }
 
     return (
-        <div style={{ padding: '10px 0', minHeight: '400px' }}>
+        <div style={{ padding: '4px 0', minHeight: '300px' }}>
             <h3 style={{
                 color: 'var(--accent-color, #ff4c4c)',
-                marginBottom: '10px',
-                fontSize: isMobile ? '1.1rem' : '1.4rem',
+                marginBottom: '6px',
+                fontSize: '0.75rem',
                 borderBottom: '1px solid rgba(255, 76, 76, 0.3)',
-                paddingBottom: '10px',
+                paddingBottom: '6px',
                 textAlign: 'center'
             }}>
-                Gestión de Backups por Estructura
+                Gestión de Backups
             </h3>
 
             <Breadcrumbs />
@@ -335,59 +336,81 @@ const AIBackupsTable = ({ chapters }) => {
             )}
 
             {viewLevel === 'prompts' && (
-                <div style={{ marginBottom: '14px' }}>
+                <div style={{ marginBottom: '8px' }}>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
+                        gap: '3px',
                         flexWrap: 'wrap',
                         background: 'rgba(255,255,255,0.02)',
                         border: '1px solid rgba(255,255,255,0.07)',
-                        borderRadius: '10px',
-                        padding: '10px 14px',
+                        borderRadius: '8px',
+                        padding: '6px 8px',
                     }}>
-                        <span style={{ fontSize: '0.62rem', color: '#555', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap', marginRight: '4px' }}>
+                        <span style={{ fontSize: '0.55rem', color: '#555', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap', marginRight: '2px', width: '100%', marginBottom: '2px' }}>
                             🏷️ filtros
                         </span>
-                        {PREDEFINED_TAGS.map(tag => {
-                            const isActive = activeTags.includes(tag)
-                            return (
-                                <button
-                                    key={tag}
-                                    onClick={() => setActiveTags(prev =>
-                                        isActive ? prev.filter(t => t !== tag) : [...prev, tag]
-                                    )}
-                                    style={{
-                                        padding: '3px 10px',
-                                        borderRadius: '50px',
-                                        border: `1px solid ${isActive ? 'var(--accent-color, #ff4c4c)' : 'rgba(255,255,255,0.1)'}`,
-                                        backgroundColor: isActive ? 'rgba(255,76,76,0.15)' : 'transparent',
-                                        color: isActive ? 'var(--accent-color, #ff4c4c)' : '#666',
-                                        fontSize: isMobile ? '0.62rem' : '0.7rem',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s ease',
-                                        fontWeight: isActive ? '600' : 'normal',
-                                        boxShadow: isActive ? '0 0 8px rgba(255,76,76,0.25)' : 'none',
-                                        letterSpacing: '0.3px',
-                                    }}
-                                >
-                                    {tag}
-                                </button>
-                            )
-                        })}
+                        {(() => {
+                            const tagAvailability = {}
+                            if (activeTags.length === 0) {
+                                PREDEFINED_TAGS.forEach(t => { tagAvailability[t] = true })
+                            } else {
+                                PREDEFINED_TAGS.forEach(t => {
+                                    if (activeTags.includes(t)) {
+                                        tagAvailability[t] = true
+                                    } else {
+                                        const testTags = [...activeTags, t]
+                                        tagAvailability[t] = prompts.some(p => {
+                                            const textToSearch = `${p.titulo} ${p.prompt} ${p.notas || ''}`.toLowerCase()
+                                            return testTags.every(tg => textToSearch.includes(tg.toLowerCase()))
+                                        })
+                                    }
+                                })
+                            }
+                            return PREDEFINED_TAGS.map(tag => {
+                                const isActive = activeTags.includes(tag)
+                                const available = tagAvailability[tag]
+                                return (
+                                    <button
+                                        key={tag}
+                                        onClick={() => {
+                                            if (!available && !isActive) return
+                                            setActiveTags(prev =>
+                                                isActive ? prev.filter(t => t !== tag) : [...prev, tag]
+                                            )
+                                        }}
+                                        style={{
+                                            padding: '2px 6px',
+                                            borderRadius: '50px',
+                                            border: `1px solid ${isActive ? 'var(--accent-color, #ff4c4c)' : (!available ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)')}`,
+                                            backgroundColor: isActive ? 'rgba(255,76,76,0.15)' : 'transparent',
+                                            color: isActive ? 'var(--accent-color, #ff4c4c)' : (!available ? '#333' : '#666'),
+                                            fontSize: '0.55rem',
+                                            cursor: available || isActive ? 'pointer' : 'default',
+                                            transition: 'all 0.2s ease',
+                                            fontWeight: isActive ? '600' : 'normal',
+                                            boxShadow: isActive ? '0 0 6px rgba(255,76,76,0.25)' : 'none',
+                                            letterSpacing: '0.2px',
+                                            opacity: isActive ? 1 : (available ? 0.85 : 0.35),
+                                        }}
+                                    >
+                                        {tag}
+                                    </button>
+                                )
+                            })
+                        })()}
                         {activeTags.length > 0 && (
                             <button
                                 onClick={() => setActiveTags([])}
                                 style={{
-                                    padding: '3px 10px',
+                                    padding: '2px 6px',
                                     borderRadius: '50px',
                                     border: '1px solid rgba(255,255,255,0.2)',
                                     backgroundColor: 'rgba(255,255,255,0.06)',
                                     color: '#aaa',
-                                    fontSize: '0.62rem',
+                                    fontSize: '0.55rem',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
-                                    marginLeft: 'auto',
                                     whiteSpace: 'nowrap',
                                 }}
                             >
@@ -401,18 +424,18 @@ const AIBackupsTable = ({ chapters }) => {
             <div style={{
                 overflowX: 'auto',
                 backgroundColor: 'rgba(0,0,0,0.2)',
-                borderRadius: '8px',
+                borderRadius: '6px',
                 border: '1px solid rgba(255,255,255,0.05)',
-                marginBottom: '20px'
+                marginBottom: '12px'
             }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#eee', fontSize: isMobile ? '0.8rem' : '0.9rem' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#eee', fontSize: '0.7rem' }}>
                     {viewLevel === 'diarios' && (
                         <>
                             <TableHeader columns={['Diario']} />
                             <tbody>
                                 {uniqueDiarios.map(d => (
                                     <tr key={d} onClick={() => selectDiario(d)} style={{ cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                                        <td style={{ padding: '12px' }}>{d}</td>
+                                        <td style={{ padding: '8px 6px', fontSize: '0.7rem' }}>{d}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -425,7 +448,7 @@ const AIBackupsTable = ({ chapters }) => {
                             <tbody>
                                 {tomosInDiario.map(t => (
                                     <tr key={t} onClick={() => selectTomo(t)} style={{ cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                                        <td style={{ padding: '12px' }}>{t}</td>
+                                        <td style={{ padding: '8px 6px', fontSize: '0.7rem' }}>{t}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -438,7 +461,7 @@ const AIBackupsTable = ({ chapters }) => {
                             <tbody>
                                 {chaptersInTomo.map(cap => (
                                     <tr key={cap.id} onClick={() => selectChapter(cap)} style={{ cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                                        <td style={{ padding: '12px' }}>{cap.nombre}</td>
+                                        <td style={{ padding: '8px 6px', fontSize: '0.7rem' }}>{cap.nombre}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -450,7 +473,7 @@ const AIBackupsTable = ({ chapters }) => {
                             <TableHeader columns={['Título', 'Acciones']} />
                             <tbody>
                                 {loading ? (
-                                    <tr><td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>Cargando...</td></tr>
+                                    <tr><td colSpan="2" style={{ textAlign: 'center', padding: '12px', fontSize: '0.7rem' }}>Cargando...</td></tr>
                                 ) : (() => {
                                     const filteredPrompts = prompts.filter(p => {
                                         if (activeTags.length === 0) return true
@@ -458,14 +481,14 @@ const AIBackupsTable = ({ chapters }) => {
                                         return activeTags.every(tag => text.includes(tag.toLowerCase()))
                                     })
                                     if (filteredPrompts.length === 0) return (
-                                        <tr><td colSpan="2" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                                        <tr><td colSpan="2" style={{ textAlign: 'center', padding: '12px', color: '#666', fontSize: '0.7rem' }}>
                                             {prompts.length === 0 ? 'Sin prompts en este capítulo.' : 'Ningún prompt coincide con los tags seleccionados.'}
                                         </td></tr>
                                     )
                                     return filteredPrompts.map(p => (
                                         <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                                            <td style={{ padding: '12px' }}>{p.titulo}</td>
-                                            <td style={{ padding: '8px 4px', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                            <td style={{ padding: '6px 6px', fontSize: '0.7rem' }}>{p.titulo}</td>
+                                            <td style={{ padding: '4px 4px', textAlign: 'center', whiteSpace: 'nowrap' }}>
                                                 <IconButton icon={CopyIcon} onClick={() => { navigator.clipboard.writeText(p.prompt); showToast("Prompt copiado") }} title="Copiar" color="#00ffcc" />
                                                 <IconButton icon={EyeIcon} onClick={() => { setSelectedSinglePrompt(p) }} title="Ver" />
                                                 <IconButton icon={MoveIcon} onClick={() => handleMovePrompt(p)} color="#888" title="Mover" />
@@ -491,72 +514,74 @@ const AIBackupsTable = ({ chapters }) => {
                     backdropFilter: 'blur(5px)'
                 }}>
                     <div style={{
-                        width: '90%',
-                        maxWidth: '800px',
+                        width: '92%',
+                        maxWidth: '400px',
                         backgroundColor: '#1a1a1a',
                         border: '1px solid var(--accent-color, #ff4c4c)',
-                        borderRadius: '12px',
-                        padding: '30px',
-                        maxHeight: '85vh',
+                        borderRadius: '10px',
+                        padding: '16px',
+                        maxHeight: '90vh',
                         display: 'flex',
                         flexDirection: 'column',
                         position: 'relative',
-                        boxShadow: '0 0 30px rgba(255, 76, 76, 0.2)'
+                        boxShadow: '0 0 20px rgba(255, 76, 76, 0.15)'
                     }}>
                         <button
                             onClick={() => { setSelectedChapterPrompts(null); setSelectedSinglePrompt(null) }}
                             style={{
                                 position: 'absolute',
-                                top: '15px', right: '15px',
+                                top: '10px', right: '12px',
                                 background: 'transparent', border: 'none',
-                                color: '#666', fontSize: '1.5rem', cursor: 'pointer'
+                                color: '#666', fontSize: '1.2rem', cursor: 'pointer',
+                                zIndex: 1
                             }}
                         >
                             ✕
                         </button>
 
-                        <h2 style={{ margin: '0 0 20px 0', color: '#fff', fontSize: '1.4rem' }}>
-                            {selectedSinglePrompt ? 'Detalle de Prompt' : `Prompts: ${selectedChapterPrompts.nombre}`}
+                        <h2 style={{ margin: '0 0 10px 0', color: '#fff', fontSize: '0.85rem', paddingRight: '24px' }}>
+                            {selectedSinglePrompt ? 'Detalle de Prompt' : `Prompts: ${selectedChapterPrompts?.nombre}`}
                         </h2>
 
-                        <div style={{ flex: 1, overflowY: 'auto', paddingRight: '10px' }}>
+                        <div style={{ flex: 1, overflowY: 'auto', paddingRight: '4px' }}>
                             {loading ? (
-                                <p style={{ textAlign: 'center', color: '#888' }}>Cargando...</p>
+                                <p style={{ textAlign: 'center', color: '#888', fontSize: '0.7rem' }}>Cargando...</p>
                             ) : (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     {(selectedSinglePrompt ? [selectedSinglePrompt] : prompts).map(p => (
                                         <div key={p.id} style={{
                                             background: 'rgba(255,255,255,0.03)',
                                             border: '1px solid rgba(255,255,255,0.1)',
-                                            borderRadius: '8px',
-                                            padding: '15px'
+                                            borderRadius: '6px',
+                                            padding: '10px'
                                         }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                                <h4 style={{ margin: 0, color: '#fff' }}>{p.titulo}</h4>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                                <h4 style={{ margin: 0, color: '#fff', fontSize: '0.7rem' }}>{p.titulo}</h4>
                                                 <button
                                                     onClick={() => {
                                                         navigator.clipboard.writeText(p.prompt)
                                                         showToast("Prompt copiado con éxito")
                                                     }}
                                                     style={{
-                                                        fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)',
+                                                        fontSize: '0.6rem', background: 'rgba(255,255,255,0.1)',
                                                         border: '1px solid #444', color: '#ccc',
-                                                        padding: '4px 8px', borderRadius: '4px', cursor: 'pointer'
+                                                        padding: '3px 6px', borderRadius: '4px', cursor: 'pointer'
                                                     }}
                                                 >
                                                     Copiar
                                                 </button>
                                             </div>
                                             <div style={{
-                                                background: '#000', padding: '12px',
+                                                background: '#000', padding: '8px',
                                                 borderRadius: '4px', fontFamily: 'monospace',
-                                                fontSize: '0.85rem', color: '#00ffcc',
-                                                whiteSpace: 'pre-wrap', border: '1px solid rgba(0,255,204,0.1)'
+                                                fontSize: '0.6rem', color: '#00ffcc',
+                                                whiteSpace: 'pre-wrap', border: '1px solid rgba(0,255,204,0.1)',
+                                                lineHeight: '1.4'
                                             }}>
                                                 {p.prompt}
                                             </div>
                                             {p.notas && (
-                                                <p style={{ margin: '10px 0 0 0', fontSize: '0.8rem', color: '#888' }}>
+                                                <p style={{ margin: '6px 0 0 0', fontSize: '0.6rem', color: '#888' }}>
                                                     <strong>Notas:</strong> {p.notas}
                                                 </p>
                                             )}
@@ -572,15 +597,15 @@ const AIBackupsTable = ({ chapters }) => {
             {toast && (
                 <div style={{
                     position: 'fixed',
-                    top: '20px',
+                    top: '16px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     backgroundColor: 'rgba(0,0,0,0.85)',
                     color: 'var(--accent-color, #ff4c4c)',
                     border: '1px solid var(--accent-color, #ff4c4c)',
-                    padding: '10px 20px',
+                    padding: '6px 14px',
                     borderRadius: '50px',
-                    fontSize: '0.9rem',
+                    fontSize: '0.65rem',
                     zIndex: 9999,
                     boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
                     backdropFilter: 'blur(5px)',

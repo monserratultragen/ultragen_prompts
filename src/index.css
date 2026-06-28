@@ -171,3 +171,48 @@ input:focus, textarea:focus, select:focus {
   font-size: 0.8rem;
   margin-top: 10px;
 }
+
+@media (max-width: 767px) {
+  body {
+    font-size: 13px;
+  }
+  .container {
+    padding: 0 8px;
+  }
+  h1 {
+    font-size: 1rem;
+  }
+  h2 {
+    font-size: 0.9rem;
+  }
+  h3 {
+    font-size: 0.85rem;
+  }
+  table {
+    font-size: 0.75rem;
+  }
+  th, td {
+    padding: 8px 6px;
+  }
+  .card {
+    padding: 8px;
+  }
+  input, textarea, select {
+    font-size: 16px;
+  }
+  .masterkey-modal {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 4px;
+  }
+  h1 {
+    font-size: 0.85rem;
+  }
+  th, td {
+    padding: 6px 4px;
+  }
+}
