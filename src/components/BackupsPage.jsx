@@ -29,6 +29,7 @@ const BackupsPage = ({ chapters }) => {
     const [categories, setCategories] = useState([])
     const [toast, setToast] = useState(null)
     const [selectedSinglePrompt, setSelectedSinglePrompt] = useState(null)
+    const [copiedId, setCopiedId] = useState(null)
 
     const showToast = (message) => {
         setToast(message)
@@ -89,6 +90,11 @@ const BackupsPage = ({ chapters }) => {
         <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+    )
+    const CheckIcon = () => (
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
     )
 
@@ -458,7 +464,7 @@ const BackupsPage = ({ chapters }) => {
                                                         </div>
                                                     </td>
                                                     <td style={{ padding: '4px 4px', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                                        <IconButton icon={CopyIcon} onClick={() => { navigator.clipboard.writeText(prompt.prompt); showToast("Prompt copiado") }} title="Copiar" color="#00ffcc" />
+                                                        <IconButton icon={copiedId === prompt.id ? CheckIcon : CopyIcon} onClick={() => { navigator.clipboard.writeText(prompt.prompt); setCopiedId(prompt.id); setTimeout(() => setCopiedId(null), 2000) }} title={copiedId === prompt.id ? "Copiado" : "Copiar"} color={copiedId === prompt.id ? "#4caf50" : "#00ffcc"} />
                                                         <IconButton icon={EyeIcon} onClick={() => setSelectedSinglePrompt(prompt)} title="Ver" />
                                                     </td>
                                                 </tr>
@@ -534,15 +540,17 @@ const BackupsPage = ({ chapters }) => {
                                     <button
                                         onClick={() => {
                                             navigator.clipboard.writeText(selectedSinglePrompt.prompt)
-                                            showToast("Prompt copiado con éxito")
+                                            setCopiedId('modal')
+                                            setTimeout(() => setCopiedId(null), 2000)
                                         }}
                                         style={{
-                                            fontSize: '0.6rem', background: 'rgba(255,255,255,0.1)',
-                                            border: '1px solid #444', color: '#ccc',
+                                            fontSize: '0.6rem', background: copiedId === 'modal' ? 'rgba(76,175,80,0.2)' : 'rgba(255,255,255,0.1)',
+                                            border: `1px solid ${copiedId === 'modal' ? '#4caf50' : '#444'}`,
+                                            color: copiedId === 'modal' ? '#4caf50' : '#ccc',
                                             padding: '3px 6px', borderRadius: '4px', cursor: 'pointer'
                                         }}
                                     >
-                                        Copiar
+                                        {copiedId === 'modal' ? '✓ Copiado' : 'Copiar'}
                                     </button>
                                 </div>
                                 <div style={{
