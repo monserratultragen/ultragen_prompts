@@ -18,7 +18,7 @@ const PREDEFINED_TAGS = [
 ]
 
 const BackupsPage = ({ chapters }) => {
-    const [activeTab, setActiveTab] = useState('chapter_backups')
+    const [activeTab, setActiveTab] = useState('featured_prompts')
     const [prompts, setPrompts] = useState([])
     const [images, setImages] = useState([])
     const [activeTags, setActiveTags] = useState([])
@@ -227,7 +227,7 @@ const BackupsPage = ({ chapters }) => {
                                     gap: '6px',
                                     justifyContent: 'center'
                                 }}>
-                                    {images.map(item => (
+                                    {[...images].sort((a, b) => (a.titulo || '').localeCompare(b.titulo || '')).map(item => (
                                         <div key={item.id} style={{
                                             backgroundColor: 'rgba(255, 255, 255, 0.03)',
                                             border: '1px solid rgba(255, 255, 255, 0.1)',
