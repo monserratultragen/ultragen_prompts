@@ -15,7 +15,7 @@ const PREDEFINED_TAGS = [
     'luz', 'natural', 'iluminación', 'sombras', 'foco', 'silueta', 'luz cálida',
     'atardecer', 'luces', 'luz natural', 'iluminado', 'sombra',
     'tirantes', 'bolso', 'guantes', 'cinturón', 'gafas', 'collar', 'pendientes', 'pulsera', 'auriculares'
-]
+].sort((a, b) => a.localeCompare(b, 'es'))
 
 const BackupsPage = ({ chapters }) => {
     const [activeTab, setActiveTab] = useState('featured_prompts')
@@ -30,6 +30,7 @@ const BackupsPage = ({ chapters }) => {
     const [toast, setToast] = useState(null)
     const [selectedSinglePrompt, setSelectedSinglePrompt] = useState(null)
     const [copiedId, setCopiedId] = useState(null)
+    const [searchText, setSearchText] = useState('')
 
     const showToast = (message) => {
         setToast(message)
@@ -345,6 +346,33 @@ const BackupsPage = ({ chapters }) => {
                                     }}>
                                         🏷️ filtros rápidos
                                     </span>
+                                    <input
+                                        type="text"
+                                        value={searchText}
+                                        onChange={e => setSearchText(e.target.value)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && searchText.trim()) {
+                                                const newTag = searchText.trim().toLowerCase()
+                                                if (!activeTags.includes(newTag)) {
+                                                    setActiveTags(prev => [...prev, newTag])
+                                                }
+                                                setSearchText('')
+                                            }
+                                        }}
+                                        placeholder="buscar filtro..."
+                                        style={{
+                                            padding: '2px 6px',
+                                            borderRadius: '50px',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            backgroundColor: 'transparent',
+                                            color: '#888',
+                                            fontSize: '0.55rem',
+                                            outline: 'none',
+                                            width: '90px',
+                                            letterSpacing: '0.2px',
+                                            lineHeight: '1.4',
+                                        }}
+                                    />
                                     {PREDEFINED_TAGS.map(tag => {
                                         const isActive = activeTags.includes(tag)
                                         const available = tagAvailability[tag]
